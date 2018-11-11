@@ -1,5 +1,5 @@
 # @Date:   2018-11-10T09:54:16-05:00
-# @Last modified time: 2018-11-10T22:23:48-05:00
+# @Last modified time: 2018-11-10T23:45:13-05:00
 # @Python Version: 2.6.6
 # @Environment: troll_classifier
 
@@ -8,6 +8,7 @@ import pandas as pd
 from scipy.stats import randint as sp_randint
 import spacy
 import string
+import dill as pickle
 from tokenizer import *
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -65,3 +66,8 @@ metrics = {"accuracy": accuracy,
 exp.log_dataset_hash(X_train)
 exp.log_multiple_params(params)
 exp.log_multiple_metrics(metrics)
+
+# pickle and export model
+filename = 'rf_troll_classifier.pk'
+with open('C:/Users/Mike/Desktop/Projects/twitter_classifier/Models/'+filename, 'wb') as file:
+    pickle.dump(grid, file)
