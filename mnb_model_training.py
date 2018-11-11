@@ -1,5 +1,5 @@
 # @Date:   2018-11-10T09:54:16-05:00
-# @Last modified time: 2018-11-10T22:23:48-05:00
+# @Last modified time: 2018-11-10T22:40:00-05:00
 # @Python Version: 2.6.6
 # @Environment: troll_classifier
 
@@ -31,15 +31,15 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = .25, rando
 
 # Define the pipeline
 tfidf = TfidfVectorizer(tokenizer = spacy_tokenizer, max_features = 5000)
-rf_grid_pipe = Pipeline([('vect', tfidf),('fit', RandomForestClassifier())])
+mnb_grid_pipe = Pipeline([('vect', tfidf),('fit', MultinomialNB())])
 
 # Grid search
-param_grid = {"fit__bootstrap" : [True, False],
-              "fit__n_estimators" : sp_randint(50, 150),
-              "fit__max_depth" : [10, 50, None],
-              "fit__max_leaf_nodes" : sp_randint(10, 50)
+param_grid = {'vect__ngram_range': [(1, 1), (1, 2),(1,3)],
+              'vect__max_df': ( 0.7,0.8,0.9,1.0),
+              'vect__min_df': (1,2),
+              'fit__alpha': ( 0.022,0.025, 0.028),
               }
-grid = RandomizedSearchCV(rf_grid_pipe, param_grid,
+grid = RandomizedSearchCV(mnb_grid_pipe, param_grid,
                           cv=3, n_iter=20, n_jobs=14, random_state=0)
 grid.fit(X_train, y_train)
 preds = grid.predict(X_test)
@@ -50,9 +50,8 @@ recall = recall_score(y_test, preds)
 f1 = f1_score(y_test, preds)
 
 # logs for comet_ml
-
 params = {"random_state": 0,
-          "model_type": "Random Forest",
+          "model_type": "Multinomial NB",
           "param_dist": str(param_grid)
           }
 
