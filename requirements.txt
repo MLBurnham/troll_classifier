@@ -54,7 +54,7 @@ preshed==1.0.0
 prometheus-client==0.4.2
 prompt-toolkit==2.0.7
 pycparser==2.19
-Pygments==2.2.0
+Pygments==2.7.4
 pyOpenSSL==18.0.0
 pyreadline==2.1
 PySocks==1.6.8
